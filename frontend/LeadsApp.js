@@ -35,7 +35,8 @@ class RecordsProcessor {
     }
 
     getPayload() {
-        const recordsData = this.records.map(record => {
+        const records = [this.records[this.records.length-1]];
+        const recordsData = records.map(record => {
             const fieldsData = {};
             this.table.fields.forEach(field => {
                 fieldsData[field.name] = record.getCellValue(field);
