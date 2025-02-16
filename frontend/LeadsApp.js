@@ -28,9 +28,10 @@ function formatCellValue(cellValue) {
 }
 
 class RecordsProcessor {
-    constructor(records, table) {
+    constructor(records, table, baseId) {
         this.records = records;
         this.table = table;
+        this.baseId = baseId;
     }
 
     getPayload() {
@@ -41,7 +42,7 @@ class RecordsProcessor {
             });
             return { id: record.id, fields: fieldsData };
         });
-        return { records: recordsData };
+        return { baseId: this.baseId, records: recordsData };
     }
 
     async triggerWebhook() {
@@ -84,7 +85,7 @@ function UpdateRecordsApp() {
         <Box padding={3} style={{ height: "100%", overflow: "auto" }}>
             <Button
                 onClick={() => {
-                    const processor = new RecordsProcessor(records, table);
+                    const processor = new RecordsProcessor(records, table, base.id);
                     processor.triggerWebhook();
                 }}
             >
