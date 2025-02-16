@@ -8,6 +8,25 @@ import {
 
 const TABLE_NAME = 'Data';
 
+// Helper function to format cell values.
+function formatCellValue(cellValue) {
+    if (cellValue === null || cellValue === undefined) {
+        return "";
+    }
+    if (typeof cellValue === "object") {
+        if (Array.isArray(cellValue)) {
+            // Join array items, showing the "name" property if present.
+            return cellValue
+                .map(item => (typeof item === "object" && item && 'name' in item ? item.name : String(item)))
+                .join(", ");
+        } else {
+            // For objects, display the "name" property if available.
+            return "name" in cellValue ? cellValue.name : JSON.stringify(cellValue);
+        }
+    }
+    return String(cellValue);
+}
+
 class RecordsProcessor {
     constructor(records, table) {
         this.records = records;
@@ -15,7 +34,6 @@ class RecordsProcessor {
     }
 
     getPayload() {
-        // Construct a payload with all records and all their field values.
         const recordsData = this.records.map(record => {
             const fieldsData = {};
             this.table.fields.forEach(field => {
@@ -54,12 +72,11 @@ function UpdateRecordsApp() {
     const table = base.getTableByName(TABLE_NAME);
     const records = useRecords(table);
 
-    // Optimized cell style: prevent wrapping and use ellipsis to save vertical space.
     const cellStyle = {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        maxWidth: '250px', // Adjust as needed to allow dynamic width.
+        maxWidth: '250px',
         padding: '4px'
     };
 
@@ -96,9 +113,7 @@ function UpdateRecordsApp() {
                         <tr key={record.id}>
                             {table.fields.map(field => (
                                 <td key={field.id} style={cellStyle}>
-                                    {record.getCellValue(field) !== null
-                                        ? record.getCellValue(field).toString()
-                                        : "(empty)"}
+                                    {formatCellValue(record.getCellValue(field))}
                                 </td>
                             ))}
                         </tr>
