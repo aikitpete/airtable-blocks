@@ -7,6 +7,7 @@ import {
 } from '@airtable/blocks/ui';
 
 const TABLE_NAME = 'Data';
+const WEBHOOK_URL = "https://aikit.app.n8n.cloud/webhook-test/cd4470fb-2c36-4bc2-947f-dc7e23daf715-leads";
 
 // Helper function to format cell values.
 function formatCellValue(cellValue) {
@@ -43,14 +44,14 @@ class RecordsProcessor {
             });
             return { id: record.id, fields: fieldsData };
         });
-        return { baseId: this.baseId, records: recordsData };
+        return { baseId: this.baseId, tableId: this.table.id, records: recordsData };
     }
 
     async triggerWebhook() {
         const payload = this.getPayload();
         try {
             const response = await fetch(
-                "https://aikit.app.n8n.cloud/webhook-test/0ea6274f-c425-4ad0-9ac2-4d7059d68028",
+                WEBHOOK_URL,
                 {
                     method: "POST",
                     headers: {

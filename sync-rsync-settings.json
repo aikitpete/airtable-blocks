@@ -1,0 +1,15 @@
+{
+    "git.enableSmartCommit": true,
+    "git.autofetch": true,
+    "sync-rsync.onSave": true,
+    "sync-rsync.onSaveIndividual": true,
+    "sync-rsync.onLoadIndividual": true,
+    "sync-rsync.executableShell": "/bin/bash",
+    "sync-rsync.remote": "ubuntu@my-ec2",
+    "sync-rsync.sites": [
+        {
+            "localPath": "/Users/swyna/Developer/airtable-blocks",
+            "remotePath": "ubuntu@my-ec2:/home/ubuntu/airtable-blocks"
+        }
+    ]
+}
