@@ -9,23 +9,23 @@ import {
 const TABLE_NAME = 'Data';
 const WEBHOOK_URL = "https://aikit.app.n8n.cloud/webhook-test/cd4470fb-2c36-4bc2-947f-dc7e23daf715-leads";
 
-// Helper function to format cell values.
-function formatCellValue(cellValue) {
+// For a given cell value, return a string for single-select fields or an array of strings for multiple-select fields.
+function processFieldValue(cellValue) {
     if (cellValue === null || cellValue === undefined) {
         return "";
     }
     if (typeof cellValue === "object") {
         if (Array.isArray(cellValue)) {
-            // Join array items, showing the "name" property if present.
-            return cellValue
-                .map(item => (typeof item === "object" && item && 'name' in item ? item.name : String(item)))
-                .join(", ");
+            // Multiple choice: return an array of the "name" properties.
+            return cellValue.map(item =>
+                item && typeof item === "object" && 'name' in item ? item.name : item
+            );
         } else {
-            // For objects, display the "name" property if available.
-            return "name" in cellValue ? cellValue.name : JSON.stringify(cellValue);
+            // Single choice: return the "name" property.
+            return cellValue && typeof cellValue === "object" && 'name' in cellValue ? cellValue.name : cellValue;
         }
     }
-    return String(cellValue);
+    return cellValue;
 }
 
 class RecordsProcessor {
@@ -35,37 +35,38 @@ class RecordsProcessor {
         this.baseId = baseId;
     }
 
-    getPayload() {
-        const records = [this.records[this.records.length-1]];
-        const recordsData = records.map(record => {
-            const fieldsData = {};
-            this.table.fields.forEach(field => {
-                fieldsData[field.name] = record.getCellValue(field);
-            });
-            return { id: record.id, fields: fieldsData };
+    // Build a flat payload for a single record.
+    buildPayloadForRecord(record) {
+        let payload = {
+            baseId: this.baseId,
+            tableId: this.table.id,
+            recordId: record.id,
+        };
+        this.table.fields.forEach(field => {
+            payload[field.name] = processFieldValue(record.getCellValue(field));
         });
-        return { baseId: this.baseId, tableId: this.table.id, records: recordsData };
+        return payload;
     }
 
-    async triggerWebhook() {
-        const payload = this.getPayload();
-        try {
-            const response = await fetch(
-                WEBHOOK_URL,
-                {
+    // Iterate over each record and send it individually.
+    async triggerWebhookRowByRow() {
+        for (const record of this.records) {
+            const payload = this.buildPayloadForRecord(record);
+            try {
+                const response = await fetch(WEBHOOK_URL, {
                     method: "POST",
                     headers: {
                         "Accept": "application/json",
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(payload)
-                }
-            );
-            console.log("Response status:", response.status);
-            const data = await response.json();
-            console.log("Response data:", data);
-        } catch (error) {
-            console.error("Fetch error:", error);
+                });
+                console.log(`Record ${record.id} - Response status:`, response.status);
+                const data = await response.json();
+                console.log(`Record ${record.id} - Response data:`, data);
+            } catch (error) {
+                console.error(`Record ${record.id} - Fetch error:`, error);
+            }
         }
     }
 }
@@ -88,7 +89,7 @@ function UpdateRecordsApp() {
             <Button
                 onClick={() => {
                     const processor = new RecordsProcessor(records, table, base.id);
-                    processor.triggerWebhook();
+                    processor.triggerWebhookRowByRow();
                 }}
             >
                 Trigger Webhook
@@ -116,7 +117,7 @@ function UpdateRecordsApp() {
                         <tr key={record.id}>
                             {table.fields.map(field => (
                                 <td key={field.id} style={cellStyle}>
-                                    {formatCellValue(record.getCellValue(field))}
+                                    {processFieldValue(record.getCellValue(field))}
                                 </td>
                             ))}
                         </tr>
