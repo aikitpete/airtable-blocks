@@ -1,5 +1,5 @@
 import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
-import LeadsApp from './LeadsApp';;
+import App from './App';;
 
-initializeBlock(() => <LeadsApp />);
+initializeBlock(() => <App />);
