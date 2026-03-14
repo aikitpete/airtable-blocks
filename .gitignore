@@ -1,3 +1,4 @@
 /airtable-webhook-leads/node_modules
 /airtable-webhook-leads/.airtableblocksrc.json
 /airtable-webhook-leads/build
+/.idea/
