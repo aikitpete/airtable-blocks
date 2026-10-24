@@ -1,0 +1,14 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: airtable-webhook-leads
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm, cache-dependency-path: airtable-webhook-leads/package-lock.json }
+      - run: npm ci
+      - run: npm run lint

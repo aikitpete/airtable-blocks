@@ -2,3 +2,8 @@
 /airtable-webhook-leads/.airtableblocksrc.json
 /airtable-webhook-leads/build
 /.idea/
+/airtable-webhook-leads/.block/remote.json
+/airtable-webhook-leads/block.log
+/airtable-webhook-leads/.tmp
+.DS_Store
+.vscode/
