@@ -27,18 +27,24 @@ Example request body:
 
 ### Install
 
-Requires Node 18+ and the [Airtable Blocks CLI](https://www.npmjs.com/package/@airtable/blocks-cli).
+Requires Node 18+ and the [Airtable Blocks CLI](https://www.npmjs.com/package/@airtable/blocks-cli) (`npm i -g @airtable/blocks-cli`).
 
-```bash
-cd airtable-webhook-leads
-npm install
-npm run lint
+1. In your base, add a custom extension (Extensions → Add an extension → Build a custom extension) and note its base and block IDs.
+2. Save your API key with `block set-api-key`, then create `airtable-webhook-leads/.block/remote.json`:
 
-# create a custom block in your base (Extensions → Add an extension → Build a custom extension), then:
-block init <blockId>/<baseId> airtable-webhook-leads   # or: block set-api-key, block run
-block run        # develop against your base
-block release    # publish to your base
-```
+   ```json
+   { "blockId": "blkXXXXXXXXXXXXXX", "baseId": "appXXXXXXXXXXXXXX" }
+   ```
+
+3. Run it:
+
+   ```bash
+   cd airtable-webhook-leads
+   npm install
+   npm run lint
+   block run        # develop against your base
+   block release    # publish to your base
+   ```
 
 The webhook URL and table are stored in the block's configuration inside Airtable, not in this repository.
 
