@@ -53,4 +53,4 @@ The webhook URL and table are stored in the block's configuration inside Airtabl
 - The block runs in the browser, so the receiving webhook has to allow cross-origin POST requests (n8n webhook nodes do by default).
 - Airtable now calls blocks *extensions*; this project uses the Blocks SDK 1.8 API, which Airtable still supports for existing blocks.
 
-MIT licence.
+MIT licence. `airtable-webhook-leads` started from Airtable's custom-block template, which is MIT-0 licensed (see `airtable-webhook-leads/LICENSE.md`).
