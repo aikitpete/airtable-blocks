@@ -1,6 +1,6 @@
 # airtable-blocks
 
-[![CI](https://github.com/aikitpete/airtable-blocks/actions/workflows/ci.yml/badge.svg)](https://github.com/aikitpete/airtable-blocks/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/aikitpete/airtable-blocks/ci.yml?branch=main&label=CI)](https://github.com/aikitpete/airtable-blocks/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/aikitpete/airtable-blocks)](LICENSE) ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB) ![Airtable](https://img.shields.io/badge/Airtable-18BFFF?logo=airtable&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
 Custom [Airtable](https://airtable.com) blocks (React) that connect a base to automation tools such as n8n, Make or Zapier.
 
